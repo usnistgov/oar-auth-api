@@ -1,0 +1,28 @@
+
+spring:
+  application:
+    name: oar-customization-service
+  profiles:
+    active: default
+  cloud:
+    config:
+      uri: http://localhost:8084
+      
+logging:
+  file: /var/log/saml.log
+  exception-conversion-word: '%wEx'
+  
+springdoc:
+  swagger-ui:
+    tagsSorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+
+samlauth:
+  enabled: true
+  
+server:
+  servlet:
+    session:
+      cookie:
+        secure: true
