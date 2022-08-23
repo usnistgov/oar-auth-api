@@ -25,4 +25,4 @@ hs_err_pid*
 #samlfiles
 *.p12
 *.jks
-*.xml
+federationmetadata.xml
