@@ -1,7 +1,7 @@
 
 spring:
   application:
-    name: oar-customization-service
+    name: oar-auth-api
   profiles:
     active: default
   cloud:
@@ -26,3 +26,4 @@ server:
     session:
       cookie:
         secure: true
+
