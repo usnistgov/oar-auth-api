@@ -26,3 +26,6 @@ hs_err_pid*
 *.p12
 *.jks
 federationmetadata.xml
+
+##
+target/*

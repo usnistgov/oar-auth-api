@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>auth.saml.service.provider</groupId>
-	<artifactId>customization-api</artifactId>
+	<artifactId>oar-auth-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>customization-api</name>
-	<description>Spring boot application to save customization changes from PDR</description>
+	<name>oar-auth-api</name>
+	<description>Spring boot application for authentication with SAML</description>
 	<packaging>jar</packaging>
 	<properties>
 		<java.version>1.8</java.version>
@@ -183,7 +183,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<build>
-		<finalName>customization-api</finalName>
+		<finalName>oar-auth-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
