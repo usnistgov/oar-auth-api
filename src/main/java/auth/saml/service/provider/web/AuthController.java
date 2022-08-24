@@ -112,7 +112,7 @@ public class AuthController {
 //		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if (authentication == null) {
-			response.sendRedirect("/customization/saml/login");
+			response.sendRedirect("/sso/saml/login");
 		} else {
 			return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
 		}
@@ -164,7 +164,7 @@ public class AuthController {
 	}
 
 	/**
-	 * When an exception occurs in the customization service while connecting
+	 * When an exception occurs in the auth service while connecting
 	 * backend or for any other reason.
 	 * 
 	 * @param ex
@@ -180,7 +180,7 @@ public class AuthController {
 	}
 
 	/**
-	 * When exception is thrown by customization service if the backend metadata
+	 * When exception is thrown by auth service if the backend metadata
 	 * service returns error.
 	 * 
 	 * @param ex

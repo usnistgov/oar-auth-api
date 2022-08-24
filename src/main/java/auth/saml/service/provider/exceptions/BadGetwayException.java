@@ -32,7 +32,7 @@ public class BadGetwayException extends Exception {
 	 * return a message prefix that can introduce a more specific message
 	 */
 	public static String getMessagePrefix() {
-		return "Customization API exception encountered: ";
+		return "Auth API exception encountered: ";
 	}
 
 	protected static String messageFor(Throwable cause) {

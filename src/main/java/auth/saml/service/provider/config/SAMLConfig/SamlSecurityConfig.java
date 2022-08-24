@@ -107,13 +107,13 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	private static Logger logger = LoggerFactory.getLogger(SamlSecurityConfig.class);
 
 	/**
-	 * Entityid for the SAML service provider, in this case customization service
+	 * Entityid for the SAML service provider, in this case auth service
 	 */
 	@Value("${saml.metdata.entityid:testid}")
 	String entityId;
 
 	/**
-	 * EntityURL for the service provider, in this case customization base url
+	 * EntityURL for the service provider, in this case auth base url
 	 */
 	@Value("${saml.metadata.entitybaseUrl:testurl}")
 	String entityBaseURL;

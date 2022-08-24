@@ -84,7 +84,7 @@ public class CustomFilter implements Filter {
 			  * request is handled and error message is returned accordingly. Ideally this filter should not be called for other endpoints but since
 			  * it is getting called, this additional check is added.
 			 */
-			if(request.getRequestURI().startsWith("/customization/saml/login")){
+			if(request.getRequestURI().startsWith("/sso/saml/login")){
 				isallowed = false;
 			}
 			System.out.println("Exception" + exp.getMessage());

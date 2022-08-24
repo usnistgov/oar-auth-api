@@ -1,7 +1,7 @@
 package auth.saml.service.provider.exceptions;
 
 /**
- * A base or generic exception for problems specific to customization api
+ * A base or generic exception for problems specific to auth api
  * related errors
  * 
  * @author Deoyani Nandrekar-Heinis
@@ -40,7 +40,7 @@ public class CustomException extends Exception {
 	 * return a message prefix that can introduce a more specific message
 	 */
 	public static String getMessagePrefix() {
-		return "Customization API exception encountered: ";
+		return "Auth API exception encountered: ";
 	}
 
 	protected static String messageFor(Throwable cause) {
