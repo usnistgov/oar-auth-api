@@ -107,39 +107,39 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	private static Logger logger = LoggerFactory.getLogger(SamlSecurityConfig.class);
 
 	/**
-	 * Entityid for the SAML service provider, in this case auth service
+	 * Entityid for the SAML service provider, in this case customization service
 	 */
-	@Value("${saml.metdata.entityid:testid}")
+	@Value("${saml.metdata.entityid}")
 	String entityId;
 
 	/**
-	 * EntityURL for the service provider, in this case auth base url
+	 * EntityURL for the service provider, in this case customization base url
 	 */
-	@Value("${saml.metadata.entitybaseUrl:testurl}")
+	@Value("${saml.metadata.entitybaseUrl}")
 	String entityBaseURL;
 
 	/**
 	 * Keystore location
 	 */
-	@Value("${saml.keystore.path:testpath}")
+	@Value("${saml.keystore.path}")
 	String keyPath;
 
 	/**
 	 * Keystore store pass
 	 */
-	@Value("${saml.keystroe.storepass:testpass}")
+	@Value("${saml.keystroe.storepass}")
 	String keystorePass;
 
 	/**
 	 * Keystrore key
 	 */
-	@Value("${saml.keystore.key:testkey}")
+	@Value("${saml.keystore.key}")
 	String keyAlias;
 
 	/**
 	 * Keystore key pass
 	 */
-	@Value("${saml.keystore.keypass:keypass}")
+	@Value("${saml.keystore.keypass}")
 	String keyPass;
 
 	/**

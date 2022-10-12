@@ -82,7 +82,7 @@ public class LocalAuthController {
 		logger.info("Get the authenticated user info.");
 //		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
-			response.sendRedirect("/sso/saml/login");
+			response.sendRedirect("/customization/saml/login");
 		} else {
 			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
 			

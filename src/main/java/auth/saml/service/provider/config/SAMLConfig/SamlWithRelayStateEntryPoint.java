@@ -44,7 +44,7 @@ public class SamlWithRelayStateEntryPoint extends SAMLEntryPoint {
 		}
 		System.out.println("ssoProfileOptions :"+ssoProfileOptions.getRelayState());
 
-		// Note  :
+		// Note for customization :
 		// Original HttpRequest can be extracted from the context param
 		// caller can pass redirect url with the request so after successful processing
 		// user can be redirected to the same page.

@@ -38,16 +38,18 @@ public class CustomFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-		System.out.println("redirectURL:" + request.getContextPath() + "\n :::" + request.getRequestURI() + " \n :::"
-				+ request.getRequestURL());
+//		System.out.println("redirectURL:" + request.getContextPath() + "\n :::" + request.getRequestURI() + " \n :::"
+//				+ request.getRequestURL());
 		try {
 			
 			String redirectURL = request.getParameterValues("redirectTo")[0];
 			if (redirectURL != null) {
 				String[] urls = allowedURLs.split(",");
+				System.out.println(urls);
 				try {
 
 					for (String urlString : urls) {
+//						System.out.println("redirecto:"+urlString);
 						URL url = new URL(redirectURL);
 						URL nUrl = new URL(urlString);
 
@@ -84,7 +86,7 @@ public class CustomFilter implements Filter {
 			  * request is handled and error message is returned accordingly. Ideally this filter should not be called for other endpoints but since
 			  * it is getting called, this additional check is added.
 			 */
-			if(request.getRequestURI().startsWith("/sso/saml/login")){
+			if(request.getRequestURI().startsWith("/customization/saml/login")){
 				isallowed = false;
 			}
 			System.out.println("Exception" + exp.getMessage());

@@ -109,7 +109,7 @@ public class AuthController {
 	
 	public ResponseEntity<AuthenticatedUserDetails> login(HttpServletResponse response, Authentication authentication) throws IOException {
 		logger.info("Get the authenticated user info.");
-//		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	//final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if (authentication == null) {
 			response.sendRedirect("/sso/saml/login");
@@ -164,7 +164,7 @@ public class AuthController {
 	}
 
 	/**
-	 * When an exception occurs in the auth service while connecting
+	 * When an exception occurs in the customization service while connecting
 	 * backend or for any other reason.
 	 * 
 	 * @param ex
@@ -180,7 +180,7 @@ public class AuthController {
 	}
 
 	/**
-	 * When exception is thrown by auth service if the backend metadata
+	 * When exception is thrown by customization service if the backend metadata
 	 * service returns error.
 	 * 
 	 * @param ex

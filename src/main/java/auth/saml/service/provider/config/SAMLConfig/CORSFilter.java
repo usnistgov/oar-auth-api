@@ -23,13 +23,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CORSFilter implements Filter {
 
-	private String allowedURLs;
+	private String[] allowedURLs = new String[0];
 
 	public CORSFilter() {
 	}
 
 	public CORSFilter(String listURLs) {
-		allowedURLs = listURLs;
+		
+		allowedURLs = listURLs.split(",");
 	}
 
 	@Override

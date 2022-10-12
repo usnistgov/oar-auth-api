@@ -37,7 +37,7 @@ public class InvalidInputException extends Exception {
 	 * return a message prefix that can introduce a more specific message
 	 */
 	public static String getMessagePrefix() {
-		return "Auth API exception encountered while processing Input: ";
+		return "Customization API exception encountered while processing Input: ";
 	}
 
 	protected static String messageFor(Throwable cause) {
