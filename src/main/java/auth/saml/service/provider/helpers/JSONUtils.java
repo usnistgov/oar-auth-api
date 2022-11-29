@@ -59,7 +59,7 @@ public final class JSONUtils {
 
 			isJSONValid(jsonRequest);
 			InputStream inputStream = JSONUtils.class.getClassLoader()
-					.getResourceAsStream("static/json-customization-schema.json");
+					.getResourceAsStream("static/json-editable.json");
 			String inputSchema = IOUtils.toString(inputStream, "UTF-8");
 
 			JSONObject rawSchema = new JSONObject(new JSONTokener(inputSchema));

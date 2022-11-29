@@ -2,10 +2,13 @@ package auth.saml.service.provider.config;
 
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
@@ -17,12 +20,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilter;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilterLocal;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationProvider;
+import auth.saml.service.provider.config.SAMLConfig.CORSFilter;
 import auth.saml.service.provider.config.SAMLConfig.SamlSecurityConfig;
 
 /**
@@ -69,39 +76,39 @@ public class WebSecurityConfig {
 		}
 	}
 
-	/**
-	 * This bean is created only in local profile this avoids using external SAML id
-	 * server.
-	 */
-	@Configuration
-//	@Profile({ "local" }) //This setting can be used to enable the feature based on certain profiles/platforms.
-	@ConditionalOnProperty(value = "samlauth.enabled", havingValue = "false", matchIfMissing = false)
-	@Order(1)
-	public static class RestApiSecurityConfigLocal extends WebSecurityConfigurerAdapter {
-		private Logger logger = LoggerFactory.getLogger(RestApiSecurityConfigLocal.class);
-
-		@Value("${jwt.secret:testsecret}")
-		String secret;
-
-		private static final String apiMatcher = "/pdr/lp/editor/**";
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			logger.info("#### RestApiSecurityConfig HttpSecurity for REST /pdr/lp/editor/ endpoints ###");
-			http.addFilterBefore(new JWTAuthenticationFilterLocal(apiMatcher, super.authenticationManager()),
-					UsernamePasswordAuthenticationFilter.class);
-
-			http.formLogin().disable();
-			http.httpBasic().and().csrf().disable();
-
-		}
-
-		@Override
-		protected void configure(AuthenticationManagerBuilder auth) {
-			auth.authenticationProvider(new JWTAuthenticationProvider(secret));
-		}
-	}
-
+//	/**
+//	 * This bean is created only in local profile this avoids using external SAML id
+//	 * server.
+//	 */
+//	@Configuration
+////	@Profile({ "local" }) //This setting can be used to enable the feature based on certain profiles/platforms.
+//	@ConditionalOnProperty(value = "samlauth.enabled", havingValue = "false", matchIfMissing = false)
+//	@Order(1)
+//	public static class RestApiSecurityConfigLocal extends WebSecurityConfigurerAdapter {
+//		private Logger logger = LoggerFactory.getLogger(RestApiSecurityConfigLocal.class);
+//
+//		@Value("${jwt.secret:testsecret}")
+//		String secret;
+//
+//		private static final String apiMatcher = "/pdr/lp/editor/**";
+//
+//		@Override
+//		protected void configure(HttpSecurity http) throws Exception {
+//			logger.info("#### RestApiSecurityConfig HttpSecurity for REST /pdr/lp/editor/ endpoints ###");
+//			http.addFilterBefore(new JWTAuthenticationFilterLocal(apiMatcher, super.authenticationManager()),
+//					UsernamePasswordAuthenticationFilter.class);
+//
+//			http.formLogin().disable();
+//			http.httpBasic().and().csrf().disable();
+//
+//		}
+//
+//		@Override
+//		protected void configure(AuthenticationManagerBuilder auth) {
+//			auth.authenticationProvider(new JWTAuthenticationProvider(secret));
+//		}
+//	}
+//
 	/**
 	 * Rest security configuration for rest api
 	 */
@@ -142,7 +149,7 @@ public class WebSecurityConfig {
 	}
 
 	/**
-	 * Security configuration for authorization end pointsq
+	 * Security configuration for authorization end points
 	 */
 	@Configuration
 	@Order(2)
@@ -151,16 +158,67 @@ public class WebSecurityConfig {
 
 		private static final String apiMatcher = "/auth/**";
 
-//		@Autowired
-//		private CustomAccessDeniedHandler accessDeniedHandler;
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			logger.info("Set up authorization related entrypoints.");
 
-			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-//			http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated();
+//			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+////			http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+//			
+//			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated();
+//			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable();
+
+			
+//			http.cors().configurationSource(request -> {
+//				CorsConfiguration cors = new CorsConfiguration();
+//			      cors.setAllowedOrigins(List.of("http://localhost:4200"));
+//			      cors.setAllowCredentials(true);
+//			      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+//			      cors.setAllowedHeaders(List.of("*"));
+//			      cors.setMaxAge((long) 830000);
+//			      return cors;
+//			    });
+//			http.csrf();
+//			
+//			 CorsConfiguration corsConfiguration = new CorsConfiguration();
+//		        corsConfiguration.setAllowedHeaders(List.of("*"));
+//		        corsConfiguration.setAllowedOrigins(List.of("*"));
+//		        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+//		        corsConfiguration.setAllowCredentials(true);
+//		        corsConfiguration.setExposedHeaders(List.of("*"));
+		        
+//		        // You can customize the following part based on your project, it's only a sample
+//		        http.authorizeRequests().antMatchers("/auth/**").permitAll().anyRequest()
+//		                .authenticated().and().csrf().disable().cors().configurationSource(
+//		                		request -> corsConfiguration);
+
+		        http.addFilterBefore(corsFilterWeb(), SessionManagementFilter.class).exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+		        http.authorizeRequests()
+				.antMatchers("/error").permitAll()
+				.antMatchers("/auth/**").permitAll()
+				.anyRequest().authenticated();
 		}
+		
+		/**
+		 * Set up filter for cross origin requests, here it is read from configserver
+		 * and applicationURL is angular application URL
+		 * 
+		 * @return CORSFilter
+		 */
+		@Bean
+		CORSFilter corsFilterWeb() {
+			logger.info("CORS filter setting for application:" + "*");
+			CORSFilter filter = new CORSFilter("http://localhost:4200");
+			return filter;
+		}
+		
+//		@Bean
+//	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//			 http.cors(); 
+//		     return http.build();
+//		}
+//		
+
 	}
 
 	/**
