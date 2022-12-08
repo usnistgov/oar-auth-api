@@ -29,7 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilter;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilterLocal;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationProvider;
-import auth.saml.service.provider.config.SAMLConfig.CORSFilter;
+import auth.saml.service.provider.config.SAMLConfig.CustomCORSFilter;
 import auth.saml.service.provider.config.SAMLConfig.SamlSecurityConfig;
 
 /**
@@ -158,46 +158,48 @@ public class WebSecurityConfig {
 
 		private static final String apiMatcher = "/auth/**";
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			logger.info("Set up authorization related entrypoints.");
-
-//			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-////			http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+//		@Override
+//		protected void configure(HttpSecurity http) throws Exception {
+//			logger.info("Set up authorization related entrypoints.");
+//
+////			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+//////			http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+////			
+////			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated();
+////			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable();
+//
 //			
-//			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated();
-//			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated().and().httpBasic().and().csrf().disable();
-
-			
-//			http.cors().configurationSource(request -> {
-//				CorsConfiguration cors = new CorsConfiguration();
-//			      cors.setAllowedOrigins(List.of("http://localhost:4200"));
-//			      cors.setAllowCredentials(true);
-//			      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
-//			      cors.setAllowedHeaders(List.of("*"));
-//			      cors.setMaxAge((long) 830000);
-//			      return cors;
-//			    });
-//			http.csrf();
+////			http.cors().configurationSource(request -> {
+////				CorsConfiguration cors = new CorsConfiguration();
+////			      cors.setAllowedOrigins(List.of("http://localhost:4200"));
+////			      cors.setAllowCredentials(true);
+////			      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+////			      cors.setAllowedHeaders(List.of("*"));
+////			      cors.setMaxAge((long) 830000);
+////			      return cors;
+////			    });
+////			http.csrf();
+////			
+////			 CorsConfiguration corsConfiguration = new CorsConfiguration();
+////		        corsConfiguration.setAllowedHeaders(List.of("*"));
+////		        corsConfiguration.setAllowedOrigins(List.of("*"));
+////		        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+////		        corsConfiguration.setAllowCredentials(true);
+////		        corsConfiguration.setExposedHeaders(List.of("*"));
+//		        
+////		        // You can customize the following part based on your project, it's only a sample
+////		        http.authorizeRequests().antMatchers("/auth/**").permitAll().anyRequest()
+////		                .authenticated().and().csrf().disable().cors().configurationSource(
+////		                		request -> corsConfiguration);
+//
 //			
-//			 CorsConfiguration corsConfiguration = new CorsConfiguration();
-//		        corsConfiguration.setAllowedHeaders(List.of("*"));
-//		        corsConfiguration.setAllowedOrigins(List.of("*"));
-//		        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
-//		        corsConfiguration.setAllowCredentials(true);
-//		        corsConfiguration.setExposedHeaders(List.of("*"));
-		        
-//		        // You can customize the following part based on your project, it's only a sample
-//		        http.authorizeRequests().antMatchers("/auth/**").permitAll().anyRequest()
-//		                .authenticated().and().csrf().disable().cors().configurationSource(
-//		                		request -> corsConfiguration);
-
-		        http.addFilterBefore(corsFilterWeb(), SessionManagementFilter.class).exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-		        http.authorizeRequests()
-				.antMatchers("/error").permitAll()
-				.antMatchers("/auth/**").permitAll()
-				.anyRequest().authenticated();
-		}
+//			///testing
+////		        http.addFilterBefore(corsFilterWeb(), SessionManagementFilter.class).exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+//		        http.authorizeRequests()
+//				.antMatchers("/error").permitAll()
+//				.antMatchers("/auth/**").permitAll();
+////				.anyRequest().authenticated();
+//		}
 		
 		/**
 		 * Set up filter for cross origin requests, here it is read from configserver
@@ -205,31 +207,39 @@ public class WebSecurityConfig {
 		 * 
 		 * @return CORSFilter
 		 */
-		@Bean
-		CORSFilter corsFilterWeb() {
-			logger.info("CORS filter setting for application:" + "*");
-			CORSFilter filter = new CORSFilter("http://localhost:4200");
-			return filter;
+//		@Bean
+//		CORSFilter corsFilterWeb() {
+//			logger.info("CORS filter setting for application:" + "*");
+//			CORSFilter filter = new CORSFilter("http://localhost:4200");
+//			return filter;
+//		}
+		
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			logger.info("Set up authorization related entrypoints.");
+
+			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+			http.antMatcher(apiMatcher).authorizeRequests().anyRequest().authenticated();
 		}
 		
-//		@Bean
-//	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//			 http.cors(); 
-//		     return http.build();
-//		}
+		@Bean
+	    public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
+			 http.cors(); 
+		     return http.build();
+		}
 //		
 
 	}
-
-	/**
-	 * Saml security config
-	 */
-	@Configuration
-//	@Profile({ "prod", "dev", "test", "default" }) //This setting can be used to enable the feature based on certain profiles/platforms.
-	@ConditionalOnProperty(value = "samlauth.enabled", havingValue = "true", matchIfMissing = true)
-	@Import(SamlSecurityConfig.class)
-	public static class SamlConfig {
-
-	}
+//
+//	/**
+//	 * Saml security config
+//	 */
+//	@Configuration
+////	@Profile({ "prod", "dev", "test", "default" }) //This setting can be used to enable the feature based on certain profiles/platforms.
+//	@ConditionalOnProperty(value = "samlauth.enabled", havingValue = "true", matchIfMissing = true)
+//	@Import(SamlSecurityConfig.class)
+//	public static class SamlConfig {
+//
+//	}
 
 }

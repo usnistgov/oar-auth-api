@@ -27,7 +27,6 @@ public class CustomFilter implements Filter {
 
 	public CustomFilter(String listURLs) {
 		allowedURLs = listURLs;
-
 	}
 
 	@Override
@@ -52,7 +51,6 @@ public class CustomFilter implements Filter {
 
 						if (redirectURL == null) {
 							isallowed = true;
-
 							break;
 						}
 						if (redirectURL != null && !url.getHost().equalsIgnoreCase(nUrl.getHost())) {

@@ -66,12 +66,11 @@ public class AuthController {
 	 * @throws CustomException
 	 * @throws UnAuthenticatedUserException
 	 */
-	@RequestMapping(value = { "_perm/{ediid}" }, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = { "/_tokeninfo" }, method = RequestMethod.GET, produces = "application/json")
 	@Parameters ({
-	    @Parameter(name = "Authentication", description = "authentication object."),
-	    @Parameter(name = "ediid", description = "The recordid for which user authorization is checked.")})
-	@Operation(summary = "Get the authorized token.", description = "Resource returns a JSON if Authorized user.")
-	public UserToken token( Authentication authentication,@PathVariable @Valid String ediid)
+	    @Parameter(name = "Authentication", description = "authentication object.")})
+	   	@Operation(summary = "Get the authorized token.", description = "Resource returns a JSON if Authorized user.")
+	public UserToken token( Authentication authentication )
 			throws UnAuthorizedUserException, CustomException, UnAuthenticatedUserException, BadGetwayException {
 
 		AuthenticatedUserDetails userDetails = null;
@@ -82,7 +81,7 @@ public class AuthController {
 			logger.info("Get the token for authenticated user.");
 			userDetails = uExtract.getUserDetails();
 
-			return jwt.getJWT(userDetails, ediid);
+			return jwt.getJWT(userDetails, "1234");
 		} catch (UnAuthorizedUserException ex) {
 			if (userDetails != null)
 				return new UserToken(userDetails, "",ex.getMessage());

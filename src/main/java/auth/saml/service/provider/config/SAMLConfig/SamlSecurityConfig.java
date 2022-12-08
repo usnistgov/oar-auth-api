@@ -760,9 +760,9 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @return CORSFilter
 	 */
 	@Bean
-	CORSFilter corsFilter() {
+	CustomCORSFilter corsFilter() {
 		logger.info("CORS filter setting for application:" + applicationURL);
-		CORSFilter filter = new CORSFilter(applicationURL);
+		CustomCORSFilter filter = new CustomCORSFilter(applicationURL);
 		return filter;
 	}
 

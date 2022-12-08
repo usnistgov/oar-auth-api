@@ -69,7 +69,7 @@ public class JWTTokenGenerator {
 	public UserToken getJWT(AuthenticatedUserDetails userDetails, String ediid)
 			throws UnAuthorizedUserException, BadGetwayException, CustomException {
 		logger.info("Get authorized user token.");
-		isAuthorized(userDetails, ediid);
+//		isAuthorized(userDetails, ediid);
 
 		try {
 			final DateTime dateTime = DateTime.now();
@@ -164,7 +164,7 @@ public class JWTTokenGenerator {
 	public UserToken getLocalJWT(AuthenticatedUserDetails userDetails, String ediid)
 			throws UnAuthorizedUserException, BadGetwayException, CustomException {
 		logger.info("Get authorized user token.");
-		isAuthorized(userDetails, ediid);
+//		isAuthorized(userDetails, ediid);
 
 		try {
 			final DateTime dateTime = DateTime.now();

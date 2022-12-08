@@ -13,6 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
+
 /**
  * This filter helps identify the origin of request, allows only the listed URLs
  * to send authentication request. Helps further communication based on token
@@ -21,14 +23,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Deoyani Nandrekar-Heinis
  *
  */
-public class CORSFilter implements Filter {
+public class CustomCORSFilter implements Filter {
 
 	private String[] allowedURLs = new String[0];
 
-	public CORSFilter() {
+	public CustomCORSFilter() {
 	}
 
-	public CORSFilter(String listURLs) {
+	public CustomCORSFilter(String listURLs) {
 		
 		allowedURLs = listURLs.split(",");
 	}
@@ -45,12 +47,15 @@ public class CORSFilter implements Filter {
 		List<String> allowedOrigins = Arrays.asList(allowedURLs);
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
-
+			
 		// Access-Control-Allow-Origin
-		String origin = request.getHeader("Origin");
-		
+		String origin = request.getHeader(HttpHeaders.ORIGIN);
+		System.out.println("origin:"+origin);
+		if (allowedOrigins.contains(origin)) {
+			response.setHeader("Access-Control-Allow-Origin", origin);
+		}
 //		response.setHeader("Access-Control-Allow-Origin", allowedOrigins.contains(origin) ? origin : "");
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		
 		response.setHeader("Vary", "Origin");
 
 		// Access-Control-Max-Age
