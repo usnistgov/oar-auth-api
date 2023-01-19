@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +47,7 @@ import io.swagger.v3.oas.annotations.Parameters;
  */
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "**")
 //@Profile({"prod","dev","test","default"})
 @ConditionalOnProperty(value = "samlauth.enabled", havingValue = "true", matchIfMissing = true)
 public class AuthController {
@@ -92,6 +96,8 @@ public class AuthController {
 
 	}
 
+	@Autowired
+    private IAuthenticationFacade authenticationFacade;
 	/**
 	 * Get Authenticated user information
 	 * 
@@ -99,7 +105,7 @@ public class AuthController {
 	 * @return JSON user id
 	 * @throws IOException
 	 */
-
+	@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "test")
 	@RequestMapping(value = { "/_logininfo" }, method = RequestMethod.GET, produces = "application/json")
 	@Parameters ({
 	    @Parameter(name = "authentication", description = "authentication object."),
@@ -108,14 +114,19 @@ public class AuthController {
 	
 	public ResponseEntity<AuthenticatedUserDetails> login(HttpServletResponse response, Authentication authentication) throws IOException {
 		logger.info("Get the authenticated user info.");
-    	//final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//		
 		
 		if (authentication == null) {
+			System.out.println("Authentication null");
 			response.sendRedirect("/sso/saml/login");
 		} else {
+			System.out.println("Authentication Details:"+uExtract.getUserDetails());
 			return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
 		}
-		return null;
+		Authentication authentication2 = authenticationFacade.getAuthentication();
+		return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
+		
 	}
 
 	/**
@@ -195,3 +206,4 @@ public class AuthController {
 	}
 
 }
+

@@ -26,7 +26,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @SpringBootApplication(exclude={SecurityAutoConfiguration.class})
 @ComponentScan(basePackages = { "auth.saml.service.provider"})
 @RefreshScope
-public class ServiceProviderApplication {
+public class ServiceProviderApplication implements WebMvcConfigurer {
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceProviderApplication.class, args);
 	}
@@ -62,5 +62,24 @@ public class ServiceProviderApplication {
 //            }
 //        };
 //    }
+	/**
+     * CORS configuration
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(
+                        "http://localhost:4200"
+                )
+                .allowedMethods(
+                        "GET",
+                        "PUT",
+                        "POST",
+                        "DELETE",
+                        "PATCH",
+                        "OPTIONS"
+                );
+    }
+
 
 }
