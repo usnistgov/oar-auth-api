@@ -34,6 +34,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.saml.SAMLDiscovery;
 import org.springframework.security.saml.SAMLEntryPoint;
 import org.springframework.security.saml.SAMLProcessingFilter;
@@ -169,7 +170,7 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	/**
 	 * SAML application URL
 	 */
-	@Value("${application.url:http://localhost:4200}")
+	@Value("${application.url:https://p932439.nist.gov}")
 	String applicationURL;
 
 	/**
@@ -424,6 +425,13 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		return new FilterChainProxy(chains);
 	}
+	
+//	@Bean
+//	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//	    http.sessionManagement()
+//	        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+//	    return http.build();
+//	}
 	
 //	@Bean
 //	public FilterChainProxy samlFilter() throws Exception {
@@ -760,9 +768,9 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @return CORSFilter
 	 */
 	@Bean
-	CORSFilter corsFilter() {
+	CustomCORSFilter corsFilter() {
 		logger.info("CORS filter setting for application:" + applicationURL);
-		CORSFilter filter = new CORSFilter(applicationURL);
+		CustomCORSFilter filter = new CustomCORSFilter(applicationURL);
 		return filter;
 	}
 
@@ -797,6 +805,7 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated();
 
 			http.logout().logoutSuccessUrl("/");
+			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
 		} catch (Exception e) {
 			throw new ConfigurationException("Exception in SAML security config for HttpSecurity," + e.getMessage());

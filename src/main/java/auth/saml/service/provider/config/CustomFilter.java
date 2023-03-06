@@ -47,7 +47,7 @@ public class CustomFilter implements Filter {
 		// Access-Control-Allow-Origin
 		String origin = request.getHeader("Origin");
 		
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+		response.setHeader("Access-Control-Allow-Origin", "https://p932439.nist.gov");
 		response.setHeader("Vary", "Origin");
 
 		// Access-Control-Max-Age

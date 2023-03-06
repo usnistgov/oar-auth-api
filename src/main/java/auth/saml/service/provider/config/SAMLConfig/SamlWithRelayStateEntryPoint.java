@@ -35,6 +35,8 @@ public class SamlWithRelayStateEntryPoint extends SAMLEntryPoint {
 	@Override
 	protected WebSSOProfileOptions getProfileOptions(SAMLMessageContext context, AuthenticationException exception) {
 
+		String[] defaultRedirectURLs = defaultRedirect.split(",");
+		
 		WebSSOProfileOptions ssoProfileOptions;
 		if (defaultOptions != null) {
 			ssoProfileOptions = defaultOptions.clone();
@@ -56,12 +58,12 @@ public class SamlWithRelayStateEntryPoint extends SAMLEntryPoint {
 		String redirectURL = httpServletRequestAdapter.getParameterValue("redirectTo");
 
 
-		if (redirectURL != null) {
-			log.info("Redirect user to +" + redirectURL);
+		if (redirectURL != null && defaultRedirect.contains(redirectURL)) {
+			log.info("Redirect user to +" + redirectURL);		
 			ssoProfileOptions.setRelayState(redirectURL);
 		} else {
 			log.info("Redirect user to default URL");
-			ssoProfileOptions.setRelayState(defaultRedirect);
+			ssoProfileOptions.setRelayState(defaultRedirectURLs[0]);
 		}
 
 		return ssoProfileOptions;

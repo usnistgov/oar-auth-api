@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.SessionManagementFilter;
@@ -29,8 +30,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilter;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationFilterLocal;
 import auth.saml.service.provider.config.JWTConfig.JWTAuthenticationProvider;
-import auth.saml.service.provider.config.SAMLConfig.CORSFilter;
+import auth.saml.service.provider.config.SAMLConfig.CustomCORSFilter;
+//import auth.saml.service.provider.config.SAMLConfig.CORSFilter;
 import auth.saml.service.provider.config.SAMLConfig.SamlSecurityConfig;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * In this configuration all the end points which need to be secured under
@@ -156,7 +159,7 @@ public class WebSecurityConfig {
 	public static class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 		private Logger logger = LoggerFactory.getLogger(AuthSecurityConfig.class);
 
-		private static final String apiMatcher = "/auth/**";
+		private static final String apiMatcher = "**/auth/**";
 
 //		@Autowired
 //		private CustomAccessDeniedHandler accessDeniedHandler;
@@ -166,17 +169,21 @@ public class WebSecurityConfig {
 
 			http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 //			http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-			http.authorizeRequests().antMatchers(HttpMethod.GET, apiMatcher).permitAll().anyRequest().authenticated();
-//			http.addFilterBefore(corsFiltertest(), SessionManagementFilter.class);
-//			http.authorizeRequests()
-//	            .antMatchers(HttpMethod.OPTIONS, "/auth/**")
-//	            .permitAll()
-//	            .anyRequest()
-//	            .authenticated()
-//	            .and()
-//	            .httpBasic();
+			http.authorizeRequests().antMatchers(HttpMethod.GET, apiMatcher).permitAll().anyRequest().authenticated()
+			.and().httpBasic().and().csrf().disable();
+			
+			http.addFilterBefore(corsCustomFilter(), SessionManagementFilter.class).exceptionHandling();
+			
+			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+//			http.cors().and().authorizeRequests().anyRequest().authenticated();
 		}
 		
+		@Bean
+		CustomCORSFilter corsCustomFilter() {
+			logger.info("CORS filter setting for application:" + "https://p932439.nist.gov");
+			CustomCORSFilter filter = new CustomCORSFilter("https://p932439.nist.gov");
+			return filter;
+		}
 		@Bean
 	    public CorsConfigurationSource corsConfigurationSource() {
 	        CorsConfiguration configuration = new CorsConfiguration();

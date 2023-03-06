@@ -21,14 +21,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Deoyani Nandrekar-Heinis
  *
  */
-public class CORSFilter implements Filter {
+public class CustomCORSFilter implements Filter {
 
 	private String[] allowedURLs = new String[0];
 
-	public CORSFilter() {
+	public CustomCORSFilter() {
 	}
 
-	public CORSFilter(String listURLs) {
+	public CustomCORSFilter(String listURLs) {
 		
 		allowedURLs = listURLs.split(",");
 	}
@@ -48,9 +48,7 @@ public class CORSFilter implements Filter {
 
 		// Access-Control-Allow-Origin
 		String origin = request.getHeader("Origin");
-		System.out.print("******Header origin"+origin);
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-				//allowedOrigins.contains(origin) ? origin : "");
+		response.setHeader("Access-Control-Allow-Origin", allowedOrigins.contains(origin) ? origin : "");
 		response.setHeader("Vary", "Origin");
 
 		// Access-Control-Max-Age

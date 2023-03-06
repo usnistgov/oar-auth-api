@@ -47,7 +47,7 @@ import io.swagger.v3.oas.annotations.Parameters;
  */
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "**")
+@CrossOrigin (origins = "https://p932439.nist.gov" , exposedHeaders = "**")
 //@Profile({"prod","dev","test","default"})
 @ConditionalOnProperty(value = "samlauth.enabled", havingValue = "true", matchIfMissing = true)
 public class AuthController {
@@ -105,7 +105,7 @@ public class AuthController {
 	 * @return JSON user id
 	 * @throws IOException
 	 */
-	@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "test")
+	@CrossOrigin (origins = "https://p932439.nist.gov" , exposedHeaders = "Origin, X-Requested-With, Content-Type, Accept")
 	@RequestMapping(value = { "/_logininfo" }, method = RequestMethod.GET, produces = "application/json")
 	@Parameters ({
 	    @Parameter(name = "authentication", description = "authentication object."),

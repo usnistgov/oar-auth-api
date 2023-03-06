@@ -22,15 +22,16 @@ import javax.servlet.http.HttpServletResponse;
  * @author Deoyani Nandrekar-Heinis
  *
  */
-public class CORSFilterAuth implements Filter {
+public class CustomCORSFilter implements Filter {
 
-	private String allowedURLs;
+	private String[] allowedURLs = new String[0];
 
-	public CORSFilterAuth() {
+	public CustomCORSFilter() {
 	}
 
-	public CORSFilterAuth(String listURLs) {
-		allowedURLs = listURLs;
+	public CustomCORSFilter(String listURLs) {
+		allowedURLs = listURLs.split(",");
+		//allowedURLs = listURLs;
 	}
 
 	@Override
