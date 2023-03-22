@@ -157,6 +157,10 @@ public class WebSecurityConfig {
 	@Configuration
 	@Order(2)
 	public static class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
+		
+		@Value("${application.url:https://p932439.nist.gov}")
+		String applicationURL;
+		
 		private Logger logger = LoggerFactory.getLogger(AuthSecurityConfig.class);
 
 		private static final String apiMatcher = "**/auth/**";
@@ -180,8 +184,9 @@ public class WebSecurityConfig {
 		
 		@Bean
 		CustomCORSFilter corsCustomFilter() {
-			logger.info("CORS filter setting for application:" + "https://p932439.nist.gov");
-			CustomCORSFilter filter = new CustomCORSFilter("https://p932439.nist.gov");
+//			logger.info("CORS filter setting for application:" + "https://p932439.nist.gov");
+//			CustomCORSFilter filter = new CustomCORSFilter("https://p932439.nist.gov");
+			CustomCORSFilter filter = new CustomCORSFilter(applicationURL);
 			return filter;
 		}
 		@Bean

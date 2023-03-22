@@ -65,11 +65,13 @@ public class ServiceProviderApplication implements WebMvcConfigurer {
 	/**
      * CORS configuration
      */
+	@Value("${application.url:https://p932439.nist.gov}")
+	String applicationURL;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:4200"
+                		applicationURL
                 )
                 .allowedMethods(
                         "GET",
