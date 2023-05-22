@@ -66,7 +66,7 @@ public class JWTTokenGenerator {
 	 * @throws UnAuthorizedUserException
 	 * @throws CustomException
 	 */
-	public UserToken getJWT(AuthenticatedUserDetails userDetails, String ediid)
+	public UserToken getJWT(AuthenticatedUserDetails userDetails)
 			throws UnAuthorizedUserException, BadGetwayException, CustomException {
 		logger.info("Get authorized user token.");
 //		isAuthorized(userDetails, ediid);
@@ -77,7 +77,7 @@ public class JWTTokenGenerator {
 			JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 			jwtClaimsSetBuilder.expirationTime(dateTime.plusMinutes(120).toDate());
 			jwtClaimsSetBuilder.claim(JWTClaimName, JWTClaimValue);
-			jwtClaimsSetBuilder.subject(userDetails.getUserEmail() + "|" + ediid);
+			jwtClaimsSetBuilder.subject(getjwtSubjectUser(userDetails));
 
 			// signature
 			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
@@ -90,7 +90,20 @@ public class JWTTokenGenerator {
 		}
 	}
 
+	/**
+	 * Get all the userdetails from UserDetails object in the format to be used for token.
+	 */
+	private String getjwtSubjectUser(AuthenticatedUserDetails userDetails) {
+		
+		return userDetails.getUserId()+"|"+userDetails.getUserName()+"|"+userDetails.getUserLastName()+"|"
+		+userDetails.getUserEmail()+"|"+userDetails.getUserDiv()+"|"+userDetails.getUserDivNum()+"|"+userDetails.getUserGroup()
+		+"|"+userDetails.getUserOU();
+				
+		
+	}
+	
 	/***
+	 * This is older code, can be reused if needed for authorization
 	 * Connect to back end metadata service to check whether authenticated user is
 	 * authorized to edit the record.
 	 * 
@@ -103,9 +116,7 @@ public class JWTTokenGenerator {
 	public void isAuthorized(AuthenticatedUserDetails userDetails, String ediid) throws UnAuthorizedUserException {
 		logger.info("Connect to backend metadata server to get the information.");
 		try {
-			String uri = mdserver + ediid + "/_perm/update/";
-//			String uri = "http://localhost:8085/rmm/test/4765EE7CC5EAA396";
-			//+ userDetails.getUserId();
+			String uri = "URL to be usedd";
 			JSONObject jObject = new JSONObject();
 			jObject.put("user",userDetails.getUserId());
 			RestTemplate restTemplate = new RestTemplate();
