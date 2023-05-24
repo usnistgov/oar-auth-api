@@ -47,7 +47,7 @@ import io.swagger.v3.oas.annotations.Parameters;
  */
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "**")
+//@CrossOrigin (origins = "https://p932439.nist.gov" , exposedHeaders = "**")
 //@Profile({"prod","dev","test","default"})
 @ConditionalOnProperty(value = "samlauth.enabled", havingValue = "true", matchIfMissing = true)
 public class AuthController {
@@ -88,7 +88,7 @@ public class AuthController {
 			return jwt.getJWT(userDetails);
 		} catch (UnAuthorizedUserException ex) {
 			if (userDetails != null)
-				return new UserToken(userDetails, "",ex.getMessage());
+				return new UserToken( "",ex.getMessage());
 
 			else
 				throw ex;
@@ -105,7 +105,7 @@ public class AuthController {
 	 * @return JSON user id
 	 * @throws IOException
 	 */
-	@CrossOrigin (origins = "http://localhost:4200/" , exposedHeaders = "test")
+//	@CrossOrigin (origins = "https://p932439.nist.gov" , exposedHeaders = "Origin, X-Requested-With, Content-Type, Accept")
 	@RequestMapping(value = { "/_logininfo" }, method = RequestMethod.GET, produces = "application/json")
 	@Parameters ({
 	    @Parameter(name = "authentication", description = "authentication object."),
@@ -114,9 +114,7 @@ public class AuthController {
 	
 	public ResponseEntity<AuthenticatedUserDetails> login(HttpServletResponse response, Authentication authentication) throws IOException {
 		logger.info("Get the authenticated user info.");
-//
-//		
-		
+	
 		if (authentication == null) {
 			System.out.println("Authentication null");
 			response.sendRedirect("/sso/saml/login");
@@ -124,7 +122,7 @@ public class AuthController {
 			System.out.println("Authentication Details:"+uExtract.getUserDetails());
 			return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
 		}
-		Authentication authentication2 = authenticationFacade.getAuthentication();
+		  //Authentication authentication2 = authenticationFacade.getAuthentication();
 		return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
 		
 	}

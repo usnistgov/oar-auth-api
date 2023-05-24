@@ -21,12 +21,10 @@ public class UserToken implements Serializable {
 	 */
 	private static final long serialVersionUID = -3414986086109823716L;
 	private String token;
-	private AuthenticatedUserDetails userDetails;
 	private String errorMessage;
 
-	public UserToken(AuthenticatedUserDetails userDetails, String token, String errorMessage) {
+	public UserToken( String token, String errorMessage) {
 		this.token = token;
-		this.userDetails = userDetails;
 		this.errorMessage = errorMessage;
 	}
 
@@ -45,21 +43,7 @@ public class UserToken implements Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	/**
-	 * Get authenticated user details
-	 * @return
-	 */
-	public AuthenticatedUserDetails getUserDetails() {
-		return this.userDetails;
-	}
 
-	/**
-	 * Set authenticated user details
-	 * @param userDetails
-	 */
-	public void setUserDetails(AuthenticatedUserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
 	
 	/***
 	 * Set this error message if there is an error while token is generated 

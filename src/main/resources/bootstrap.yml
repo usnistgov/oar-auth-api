@@ -18,11 +18,12 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
 
-samlauth:
-  enabled: true
+#samlauth:
+#  enabled: true
   
 server:
   servlet:
     session:
       cookie:
         secure: true
+
