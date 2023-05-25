@@ -66,31 +66,44 @@ public class JWTTokenGenerator {
 	 * @throws UnAuthorizedUserException
 	 * @throws CustomException
 	 */
-	public UserToken getJWT(AuthenticatedUserDetails userDetails, String ediid)
+	public UserToken getJWT(AuthenticatedUserDetails userDetails)
 			throws UnAuthorizedUserException, BadGetwayException, CustomException {
 		logger.info("Get authorized user token.");
-//		isAuthorized(userDetails, ediid);
+
 
 		try {
 			final DateTime dateTime = DateTime.now();
 			// build claims
 			JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
 			jwtClaimsSetBuilder.expirationTime(dateTime.plusMinutes(120).toDate());
-			jwtClaimsSetBuilder.claim(JWTClaimName, JWTClaimValue);
-			jwtClaimsSetBuilder.subject(userDetails.getUserEmail() + "|" + ediid);
-
+//			jwtClaimsSetBuilder.claim(JWTClaimName, JWTClaimValue);
+			
+			jwtClaimsSetBuilder.subject(userDetails.getUserId());
+			jwtClaimsSetBuilder.claim("userName",userDetails.getUserName());
+			jwtClaimsSetBuilder.claim("userLastName",userDetails.getUserLastName());
+			jwtClaimsSetBuilder.claim("userEmail",userDetails.getUserEmail());
+			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
+			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
+			jwtClaimsSetBuilder.claim("userDivNum",userDetails.getUserDivNum());
+			jwtClaimsSetBuilder.claim("userGroup",userDetails.getUserGroup());
+			jwtClaimsSetBuilder.claim("userOU",userDetails.getUserOU());
+					
+			
 			// signature
 			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
 			signedJWT.sign(new MACSigner(JWTSECRET));
 
-			return new UserToken(userDetails, signedJWT.serialize(),"");
+			return new UserToken(signedJWT.serialize(),"");
 		} catch (JOSEException e) {
 			logger.error("Unable to generate token for the this user." + e.getMessage());
 			throw new UnAuthorizedUserException("Unable to generate token for the this user.");
 		}
 	}
 
+	
+	
 	/***
+	 * This is older code, can be reused if needed for authorization
 	 * Connect to back end metadata service to check whether authenticated user is
 	 * authorized to edit the record.
 	 * 
@@ -103,9 +116,7 @@ public class JWTTokenGenerator {
 	public void isAuthorized(AuthenticatedUserDetails userDetails, String ediid) throws UnAuthorizedUserException {
 		logger.info("Connect to backend metadata server to get the information.");
 		try {
-			String uri = mdserver + ediid + "/_perm/update/";
-//			String uri = "http://localhost:8085/rmm/test/4765EE7CC5EAA396";
-			//+ userDetails.getUserId();
+			String uri = "URL to be usedd";
 			JSONObject jObject = new JSONObject();
 			jObject.put("user",userDetails.getUserId());
 			RestTemplate restTemplate = new RestTemplate();
@@ -151,38 +162,38 @@ public class JWTTokenGenerator {
 
 	}
 	
-	//Only for local testing
-	/**
-	 * Get the UserToken if user is authorized to edit given record.
-	 * 
-	 * @param userId Authenticated user
-	 * @param ediid  Record identifier
-	 * @return UserToken, userid and token
-	 * @throws UnAuthorizedUserException
-	 * @throws CustomException
-	 */
-	public UserToken getLocalJWT(AuthenticatedUserDetails userDetails, String ediid)
-			throws UnAuthorizedUserException, BadGetwayException, CustomException {
-		logger.info("Get authorized user token.");
-//		isAuthorized(userDetails, ediid);
-
-		try {
-			final DateTime dateTime = DateTime.now();
-			// build claims
-			JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
-			jwtClaimsSetBuilder.expirationTime(dateTime.plusMinutes(120).toDate());
-			jwtClaimsSetBuilder.claim(JWTClaimName, JWTClaimValue);
-			jwtClaimsSetBuilder.subject(userDetails.getUserEmail() + "|" + ediid);
-
-			// signature
-			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
-			signedJWT.sign(new MACSigner(JWTSECRET));
-
-			return new UserToken(userDetails, signedJWT.serialize(),"");
-		} catch (JOSEException e) {
-			logger.error("Unable to generate token for the this user." + e.getMessage());
-			throw new UnAuthorizedUserException("Unable to generate token for the this user.");
-		}
-	}
+//	//Only for local testing
+//	/**
+//	 * Get the UserToken if user is authorized to edit given record.
+//	 * 
+//	 * @param userId Authenticated user
+//	 * @param ediid  Record identifier
+//	 * @return UserToken, userid and token
+//	 * @throws UnAuthorizedUserException
+//	 * @throws CustomException
+//	 */
+//	public UserToken getLocalJWT(AuthenticatedUserDetails userDetails, String ediid)
+//			throws UnAuthorizedUserException, BadGetwayException, CustomException {
+//		logger.info("Get authorized user token.");
+////		isAuthorized(userDetails, ediid);
+//
+//		try {
+//			final DateTime dateTime = DateTime.now();
+//			// build claims
+//			JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
+//			jwtClaimsSetBuilder.expirationTime(dateTime.plusMinutes(120).toDate());
+//			jwtClaimsSetBuilder.claim(JWTClaimName, JWTClaimValue);
+//			jwtClaimsSetBuilder.subject(userDetails.getUserEmail() + "|" + ediid);
+//
+//			// signature
+//			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
+//			signedJWT.sign(new MACSigner(JWTSECRET));
+//
+//			return new UserToken( signedJWT.serialize(),"");
+//		} catch (JOSEException e) {
+//			logger.error("Unable to generate token for the this user." + e.getMessage());
+//			throw new UnAuthorizedUserException("Unable to generate token for the this user.");
+//		}
+//	}
 
 }
