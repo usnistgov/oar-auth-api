@@ -91,7 +91,7 @@ public class AuthController {
 				return new UserToken( "",ex.getMessage());
 
 			else
-				throw ex;
+				throw new UnAuthenticatedUserException("Error getting authentication details.");
 		}
 
 	}
@@ -112,19 +112,21 @@ public class AuthController {
 	    @Parameter(name = "response", description = "HttpServletResponse .")})
 	@Operation(summary = "Get the authorized token.", description = "Resource returns a JSON if Authorized user.")
 	
-	public ResponseEntity<AuthenticatedUserDetails> login(HttpServletResponse response, Authentication authentication) throws IOException {
+	public ResponseEntity<AuthenticatedUserDetails> login(HttpServletResponse response, Authentication authentication) throws UnAuthenticatedUserException,CustomException, IOException {
 		logger.info("Get the authenticated user info.");
-	
+	    try {
 		if (authentication == null) {
 			System.out.println("Authentication null");
-			response.sendRedirect("/sso/saml/login");
+			throw new UnAuthenticatedUserException(" User is not authenticated to access this resource.");
+//			response.sendRedirect("/sso/saml/login");
 		} else {
 			System.out.println("Authentication Details:"+uExtract.getUserDetails());
 			return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
 		}
-		  //Authentication authentication2 = authenticationFacade.getAuthentication();
-		return new ResponseEntity<>(uExtract.getUserDetails(), HttpStatus.OK);
-		
+	    }catch(Exception ex) {
+	    	throw new UnAuthenticatedUserException("Error getting authentication details.");
+	    }
+
 	}
 
 	/**

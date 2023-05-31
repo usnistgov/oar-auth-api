@@ -76,7 +76,7 @@ public class LocalAuthController {
 			logger.info("Get the token for authenticated user.");
 			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
 			return jwt.getJWT(pauth);
-		} catch (UnAuthorizedUserException ex) {
+		} catch (UnAuthenticatedUserException ex) {
 
 				throw ex;
 		}
@@ -92,16 +92,20 @@ public class LocalAuthController {
 	 */
 
 	@RequestMapping(value = { "/_logininfo" }, method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<AuthenticatedUserDetails> loginLocal(HttpServletResponse response, Authentication authentication) throws IOException {
+	public ResponseEntity<AuthenticatedUserDetails> loginLocal(HttpServletResponse response, Authentication authentication) throws UnAuthorizedUserException, CustomException, UnAuthenticatedUserException, BadGetwayException {
 		logger.info("Get the authenticated user info.");
 		if (authentication == null) {
-			response.sendRedirect("/saml/login");
-		} else {
+			//response.sendRedirect("/saml/login");
+			throw new UnAuthenticatedUserException("Unauthenticated User", "User is not authenticated or not logged in.");
+		}
+		try {
 			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
 			
 			return new ResponseEntity<>(pauth, HttpStatus.OK);
-		}
-		return null;
+		}catch (Exception ex) {
+
+			throw new CustomException("Error getting Authentication details.");
+	    }
 	}
 	/**
 	 * Exception handling if user is not authorized
