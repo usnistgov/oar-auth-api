@@ -27,6 +27,11 @@ public class UserToken implements Serializable {
 		this.token = token;
 		this.errorMessage = errorMessage;
 	}
+	
+	public UserToken( String token) {
+		this.token = token;
+		
+	}
 
 	/**
 	 * get the JWT generated for authorized user
