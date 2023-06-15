@@ -93,7 +93,7 @@ public class JWTTokenGenerator {
 			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
 			signedJWT.sign(new MACSigner(JWTSECRET));
 
-			return new UserToken(signedJWT.serialize());
+			return new UserToken(signedJWT.serialize(), userDetails);
 		} catch (JOSEException e) {
 			logger.error("Unable to generate token for the this user." + e.getMessage());
 			throw new UnAuthorizedUserException("Unable to generate token for the this user.");

@@ -22,7 +22,13 @@ public class UserToken implements Serializable {
 	private static final long serialVersionUID = -3414986086109823716L;
 	private String token;
 	private String errorMessage;
+	private AuthenticatedUserDetails userDetails;
 
+	public UserToken( String token, AuthenticatedUserDetails userDetails) {
+		this.token = token;
+		this.userDetails = userDetails;
+	}
+	
 	public UserToken( String token, String errorMessage) {
 		this.token = token;
 		this.errorMessage = errorMessage;
