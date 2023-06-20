@@ -40,6 +40,22 @@ public class UserToken implements Serializable {
 	}
 
 	/**
+	 * Get Authenticated User Deatils
+	 * @return
+	 */
+	public AuthenticatedUserDetails getUserDetails() {
+		return this.userDetails;
+	}
+	/**
+	 * Set Authenticated user details
+	 * @param userDetails
+	 */
+	public void setUserDetails(AuthenticatedUserDetails userDetails) {
+		this.userDetails = userDetails;
+	}
+	
+	
+	/**
 	 * get the JWT generated for authorized user
 	 * @return String
 	 */
