@@ -9,7 +9,8 @@ spring:
       uri: http://localhost:8084
       
 logging:
-  file: /var/log/saml.log
+  path: /tmp/authapi
+  file: authservice.log
   exception-conversion-word: '%wEx'
   
 springdoc:
