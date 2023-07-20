@@ -82,18 +82,18 @@ public class JWTTokenGenerator {
 			jwtClaimsSetBuilder.claim("userName",userDetails.getUserName());
 			jwtClaimsSetBuilder.claim("userLastName",userDetails.getUserLastName());
 			jwtClaimsSetBuilder.claim("userEmail",userDetails.getUserEmail());
-			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
-			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
-			jwtClaimsSetBuilder.claim("userDivNum",userDetails.getUserDivNum());
-			jwtClaimsSetBuilder.claim("userGroup",userDetails.getUserGroup());
-			jwtClaimsSetBuilder.claim("userOU",userDetails.getUserOU());
-					
+//			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
+//			jwtClaimsSetBuilder.claim("userDiv",userDetails.getUserDiv());
+//			jwtClaimsSetBuilder.claim("userDivNum",userDetails.getUserDivNum());
+//			jwtClaimsSetBuilder.claim("userGroup",userDetails.getUserGroup());
+//			jwtClaimsSetBuilder.claim("userOU",userDetails.getUserOU());
+//					
 			
 			// signature
 			SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
 			signedJWT.sign(new MACSigner(JWTSECRET));
 
-			return new UserToken(signedJWT.serialize(),"");
+			return new UserToken(signedJWT.serialize(), userDetails);
 		} catch (JOSEException e) {
 			logger.error("Unable to generate token for the this user." + e.getMessage());
 			throw new UnAuthorizedUserException("Unable to generate token for the this user.");

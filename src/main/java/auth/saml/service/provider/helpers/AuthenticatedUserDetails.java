@@ -34,36 +34,35 @@ public class AuthenticatedUserDetails implements Serializable {
 	private String userEmail;
 
 	
-	/**
-	 * Short system user group
-	 */
-	private String userGroup;
-	/**
-	 * User's  Division
-	 */
-	private String userDiv;
-	/**
-	 * User's  Division number
-	 */
-	private String userDivNum;
-	/**
-	 * User's OU
-	 */
-	private String userOU;
+//	/**
+//	 * Short system user group
+//	 */
+//	private String userGroup;
+//	/**
+//	 * User's  Division
+//	 */
+//	private String userDiv;
+//	/**
+//	 * User's  Division number
+//	 */
+//	private String userDivNum;
+//	/**
+//	 * User's OU
+//	 */
+//	private String userOU;
 	
 	public AuthenticatedUserDetails() {
 	}
 
-	public AuthenticatedUserDetails(String userEmail, String userName, String userLastName, String userId, 
-			String userGroup, String userDiv, String userDivNum, String userOU) {
+	public AuthenticatedUserDetails(String userEmail, String userName, String userLastName, String userId) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userLastName = userLastName;
 		this.userEmail = userEmail;
-		this.userGroup = userGroup;
-		this.userDiv = userDiv;
-		this.userDivNum = userDivNum;
-		this.userOU = userOU;
+//		this.userGroup = userGroup;
+//		this.userDiv = userDiv;
+//		this.userDivNum = userDivNum;
+//		this.userOU = userOU;
 	}
 
 	/**
@@ -107,43 +106,43 @@ public class AuthenticatedUserDetails implements Serializable {
 	
 	
 	/**
-	 * Set User's Division
-	 * 
-	 * @param userDiv
-	 */
-	public void setUserDiv(String userDiv) {
-		this.userDiv = userDiv;
-	}
-
-	
-	/**
-	 * Set User's Division Number
-	 * 
-	 * @param userDivNum
-	 */
-	public void setUserDivNum(String userDivNum) {
-		this.userDivNum = userDivNum;
-	}
-	
-	
-	/**
-	 * Set User's group
-	 * 
-	 * @param userGroup
-	 */
-	public void setUserGroup(String userGroup) {
-		this.userGroup = userGroup;
-	}
-	
-	
-	/**
-	 * Set User's OU
-	 * 
-	 * @param userOU
-	 */
-	public void setUserOU(String userOU) {
-		this.userOU = userOU;
-	}
+//	 * Set User's Division
+//	 * 
+//	 * @param userDiv
+//	 */
+//	public void setUserDiv(String userDiv) {
+//		this.userDiv = userDiv;
+//	}
+//
+//	
+//	/**
+//	 * Set User's Division Number
+//	 * 
+//	 * @param userDivNum
+//	 */
+//	public void setUserDivNum(String userDivNum) {
+//		this.userDivNum = userDivNum;
+//	}
+//	
+//	
+//	/**
+//	 * Set User's group
+//	 * 
+//	 * @param userGroup
+//	 */
+//	public void setUserGroup(String userGroup) {
+//		this.userGroup = userGroup;
+//	}
+//	
+//	
+//	/**
+//	 * Set User's OU
+//	 * 
+//	 * @param userOU
+//	 */
+//	public void setUserOU(String userOU) {
+//		this.userOU = userOU;
+//	}
 	/**
 	 * Get User's short Id
 	 * 
@@ -180,42 +179,42 @@ public class AuthenticatedUserDetails implements Serializable {
 		return this.userEmail;
 	}
 
-	/**
-	 * Get User's Division
-	 * 
-	 * @param userDiv
-	 */
-	public String getUserDiv() {
-		return this.userDiv;
-	}
-
-	
-	/**
-	 * Get User's Division Number
-	 * 
-	 * @param userDivNum
-	 */
-	public String getUserDivNum() {
-		return this.userDivNum;
-	}
-	
-	
-	/**
-	 * Get User's group
-	 * 
-	 * @param userGroup
-	 */
-	public String getUserGroup() {
-		return this.userGroup;
-	}
-	
-	
-	/**
-	 * Get User's OU
-	 * 
-	 * @param userOU
-	 */
-	public String getUserOU() {
-		return this.userOU;
-	}
+//	/**
+//	 * Get User's Division
+//	 * 
+//	 * @param userDiv
+//	 */
+//	public String getUserDiv() {
+//		return this.userDiv;
+//	}
+//
+//	
+//	/**
+//	 * Get User's Division Number
+//	 * 
+//	 * @param userDivNum
+//	 */
+//	public String getUserDivNum() {
+//		return this.userDivNum;
+//	}
+//	
+//	
+//	/**
+//	 * Get User's group
+//	 * 
+//	 * @param userGroup
+//	 */
+//	public String getUserGroup() {
+//		return this.userGroup;
+//	}
+//	
+//	
+//	/**
+//	 * Get User's OU
+//	 * 
+//	 * @param userOU
+//	 */
+//	public String getUserOU() {
+//		return this.userOU;
+//	}
 }

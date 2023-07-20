@@ -28,29 +28,29 @@ public class SamlUserDetailsService implements SAMLUserDetailsService {
 	@Value("${saml.attribute.claim.userid}")
 	private String userid;
 	
-	@Value("${saml.attribute.claim.usergroup}")
-	private String usergroup;
-
-	@Value("${saml.attribute.claim.nistdivisionname}")
-	private String divisionname;
-
-	@Value("${saml.attribute.claim.nistdivisionnumber}")
-	private String divisionnumber;
-
-	@Value("${saml.attribute.claim.nistouname}")
-	private String ouname;
+//	@Value("${saml.attribute.claim.usergroup}")
+//	private String usergroup;
+//
+//	@Value("${saml.attribute.claim.nistdivisionname}")
+//	private String divisionname;
+//
+//	@Value("${saml.attribute.claim.nistdivisionnumber}")
+//	private String divisionnumber;
+//
+//	@Value("${saml.attribute.claim.nistouname}")
+//	private String ouname;
 
 	@Override
 	public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
 		String userEmail1 = credential.getAttributeAsString(email);
 		System.out.println("userEmail1:" + userEmail1);
-		String group = credential.getAttributeAsString(usergroup);
-		String division = credential.getAttributeAsString(divisionname);
-		String divnumber = credential.getAttributeAsString(divisionnumber);
-		String OU = credential.getAttributeAsString(ouname);
+//		String group = credential.getAttributeAsString(usergroup);
+//		String division = credential.getAttributeAsString(divisionname);
+//		String divnumber = credential.getAttributeAsString(divisionnumber);
+//		String OU = credential.getAttributeAsString(ouname);
 		AuthenticatedUserDetails samUser = new AuthenticatedUserDetails(credential.getAttributeAsString(email),
 				credential.getAttributeAsString(name), credential.getAttributeAsString(lastname),
-				credential.getAttributeAsString(userid),group, division, divnumber, OU
+				credential.getAttributeAsString(userid)
 				);
 		return samUser;
 	}
