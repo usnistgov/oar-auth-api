@@ -75,6 +75,8 @@ public class LocalAuthController {
 				throw new UnAuthenticatedUserException(" User is not authenticated to access this resource.");
 			logger.info("Get the token for authenticated user.");
 			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
+			UserToken ustoken = jwt.getJWT(pauth);
+			System.out.print(ustoken);
 			return jwt.getJWT(pauth);
 		} catch (UnAuthenticatedUserException ex) {
 

@@ -88,7 +88,7 @@ public class AuthController {
 			return jwt.getJWT(userDetails);
 		} catch (UnAuthorizedUserException ex) {
 			if (userDetails != null)
-				return new UserToken( "",ex.getMessage());
+				return new UserToken( "", ex.getMessage());
 
 			else
 				throw new UnAuthenticatedUserException("Error getting authentication details.");
