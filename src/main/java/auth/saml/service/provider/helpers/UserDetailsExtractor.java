@@ -36,7 +36,8 @@ public class UserDetailsExtractor {
 //
 //	@Value("${saml.attribute.claim.nistouname}")
 //	private String ouname;
-
+	@Value("${saml.attribute.claim.nistouacr}")
+	private String ouacr;
 	/**
 	 * Return userId if authenticated user and in context else return empty string
 	 * if no user can be extracted.
@@ -57,7 +58,8 @@ public class UserDetailsExtractor {
 //			String division = credential.getAttributeAsString(divisionname);
 //			String divnumber = credential.getAttributeAsString(divisionnumber);
 //			String OU = credential.getAttributeAsString(ouname);
-			authUser = new AuthenticatedUserDetails(email, name, lastName, userid);
+			String OUacrm = credential.getAttributeAsString(ouacr);
+			authUser = new AuthenticatedUserDetails(email, name, lastName, userid, OUacrm);
 
 		} catch (Exception exp) {
 			logger.error("No user is authenticated and return empty userid");

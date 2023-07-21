@@ -37,8 +37,8 @@ public class SamlUserDetailsService implements SAMLUserDetailsService {
 //	@Value("${saml.attribute.claim.nistdivisionnumber}")
 //	private String divisionnumber;
 //
-//	@Value("${saml.attribute.claim.nistouname}")
-//	private String ouname;
+	@Value("${saml.attribute.claim.nistouacr}")
+	private String ouacr;
 
 	@Override
 	public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
@@ -47,10 +47,10 @@ public class SamlUserDetailsService implements SAMLUserDetailsService {
 //		String group = credential.getAttributeAsString(usergroup);
 //		String division = credential.getAttributeAsString(divisionname);
 //		String divnumber = credential.getAttributeAsString(divisionnumber);
-//		String OU = credential.getAttributeAsString(ouname);
+		String OUacr = credential.getAttributeAsString(ouacr);
 		AuthenticatedUserDetails samUser = new AuthenticatedUserDetails(credential.getAttributeAsString(email),
 				credential.getAttributeAsString(name), credential.getAttributeAsString(lastname),
-				credential.getAttributeAsString(userid)
+				credential.getAttributeAsString(userid), OUacr
 				);
 		return samUser;
 	}

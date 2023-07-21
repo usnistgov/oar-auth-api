@@ -44,7 +44,7 @@ public class LocalSamlController {
 		System.out.print("test:" + redirectTo);
 		logger.info("This should be called only while running locally. This authenticates all the requests.");
 		AuthenticatedUserDetails authDetails = new AuthenticatedUserDetails("testuser@test.com", "TestUser",
-				"TestLast", "TestId");
+				"TestLast", "TestId", "TestOU");
 		Authentication auth = new UsernamePasswordAuthenticationToken(authDetails, "guestpass");
 		// auth.setAuthenticated(true);
 		SecurityContext sc = SecurityContextHolder.getContext();

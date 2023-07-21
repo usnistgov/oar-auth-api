@@ -46,15 +46,15 @@ public class AuthenticatedUserDetails implements Serializable {
 //	 * User's  Division number
 //	 */
 //	private String userDivNum;
-//	/**
-//	 * User's OU
-//	 */
-//	private String userOU;
+	/**
+	 * User's OU
+	 */
+	private String userOUacr;
 	
 	public AuthenticatedUserDetails() {
 	}
 
-	public AuthenticatedUserDetails(String userEmail, String userName, String userLastName, String userId) {
+	public AuthenticatedUserDetails(String userEmail, String userName, String userLastName, String userId, String userOUacr) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userLastName = userLastName;
@@ -62,7 +62,7 @@ public class AuthenticatedUserDetails implements Serializable {
 //		this.userGroup = userGroup;
 //		this.userDiv = userDiv;
 //		this.userDivNum = userDivNum;
-//		this.userOU = userOU;
+		this.userOUacr = userOUacr;
 	}
 
 	/**
@@ -135,14 +135,14 @@ public class AuthenticatedUserDetails implements Serializable {
 //	}
 //	
 //	
-//	/**
-//	 * Set User's OU
-//	 * 
-//	 * @param userOU
-//	 */
-//	public void setUserOU(String userOU) {
-//		this.userOU = userOU;
-//	}
+	/**
+	 * Set User's OU
+	 * 
+	 * @param userOU
+	 */
+	public void setUserOU(String userOUacr) {
+		this.userOUacr = userOUacr;
+	}
 	/**
 	 * Get User's short Id
 	 * 
@@ -209,12 +209,12 @@ public class AuthenticatedUserDetails implements Serializable {
 //	}
 //	
 //	
-//	/**
-//	 * Get User's OU
-//	 * 
-//	 * @param userOU
-//	 */
-//	public String getUserOU() {
-//		return this.userOU;
-//	}
+	/**
+	 * Get User's OU
+	 * 
+	 * @param userOU
+	 */
+	public String getUserOUacr() {
+		return this.userOUacr;
+	}
 }
