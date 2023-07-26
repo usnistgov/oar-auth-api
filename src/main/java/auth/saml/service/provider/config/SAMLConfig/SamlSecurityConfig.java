@@ -478,7 +478,7 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	public Protocol socketFactoryProtocol() throws ConfigurationException {
-		return new Protocol("https", socketFactory(), 443);
+		return new Protocol("https", socketFactory(), 8099);
 	}
 
 	/**
@@ -612,7 +612,7 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 		SAMLContextProviderLB samlContextProviderLB = new SAMLContextProviderLB();
 		samlContextProviderLB.setScheme(samlScheme);
 		samlContextProviderLB.setServerName(samlServer);
-		samlContextProviderLB.setServerPort(443);
+		samlContextProviderLB.setServerPort(8099);
 		samlContextProviderLB.setIncludeServerPortInRequestURL(true);
 		samlContextProviderLB.setContextPath(samlContext);
 		samlContextProviderLB.setStorageFactory(new org.springframework.security.saml.storage.EmptyStorageFactory());
