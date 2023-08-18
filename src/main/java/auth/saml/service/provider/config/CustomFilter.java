@@ -23,6 +23,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 //@Order(Ordered.HIGHEST_PRECEDENCE)
 //This filter is added to process requests with /saml/login.
+/**
+ * This Filter checks whether the requested URLs are part of allowed URLs.
+ * This to make sure only applications which are approved get redirected to after successful saml request.
+ * @author Deoyani Nandrekar Heinis
+ *
+ */
 public class CustomFilter implements Filter {
 
 	private String allowedURLs;
@@ -60,20 +66,18 @@ public class CustomFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Headers",
 				"Origin, X-Requested-With, Content-Type, Accept, withCredentials" + "X-CSRF-TOKEN");
 
-		System.out.println("redirectURL:" + request.getContextPath() + "\n :::"
-				+ request.getRequestURI() + " \n :::"
-				+ request.getRequestURL());
 
 		try {
 
 			String redirectURL = request.getParameterValues("redirectTo")[0];
+			System.out.println("redirectURL:"+redirectURL);
 			if (redirectURL != null) {
 				String[] urls = allowedURLs.split(",");
-				System.out.println(urls);
+				
 				try {
 
 					for (String urlString : urls) {
-						// System.out.println("redirecto:"+urlString);
+						
 						URL url = new URL(redirectURL);
 						URL nUrl = new URL(urlString);
 
