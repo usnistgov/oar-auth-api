@@ -23,14 +23,21 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CustomCORSFilter implements Filter {
 
-	private String[] allowedURLs = new String[0];
+        // a comma-separated list of base URLs 
+        private String allowedURLs = "";
 
 	public CustomCORSFilter() {
 	}
 
+        /**
+         * create the filter
+         * @param listURLs    the list of referer/origin URL bases that are allowed to access the 
+         *                    service, given as a comma-delimited list.  This list will be provided
+         *                    as the value of the "Access-Control-Allow-Origin" HTTP header parameter
+         *                    that controls CORS behavior.  
+         */
 	public CustomCORSFilter(String listURLs) {
-		
-		allowedURLs = listURLs.split(",");
+		allowedURLs = listURLs;
 	}
 
 	@Override
@@ -42,13 +49,13 @@ public class CustomCORSFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 
-		List<String> allowedOrigins = Arrays.asList(allowedURLs);
+                // List<String> allowedOrigins = Arrays.asList(allowedURLs);
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 
 		// Access-Control-Allow-Origin
-		String origin = request.getHeader("Origin");
-		response.setHeader("Access-Control-Allow-Origin", allowedOrigins.contains(origin) ? origin : "");
+		// String origin = request.getHeader("Origin");
+		response.setHeader("Access-Control-Allow-Origin", allowedURLs);
 		response.setHeader("Vary", "Origin");
 
 		// Access-Control-Max-Age
