@@ -1,30 +1,18 @@
-FROM maven:3-eclipse-temurin-17-alpine
+FROM maven:3-eclipse-temurin-17-focal
 
-RUN apk update && apk upgrade && apk add --no-cache netcat-openbsd zip git less \
-                                             gnupg python3 wget nss
+RUN apt-get update && \
+    apt-get install -y zip git less netcat-openbsd gnupg python3 wget
 
-RUN apk --no-cache add ca-certificates
-# RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
-# RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-2.29-r0.apk
-# RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-bin-2.29-r0.apk
-
-# RUN apk add glibc-2.29-r0.apk glibc-bin-2.29-r0.apk
-
-# RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.29-r0/glibc-i18n-2.29-r0.apk
-# RUN apk add glibc-bin-2.29-r0.apk glibc-i18n-2.29-r0.apk
-# RUN /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8
-
-# can safely omit next line as Alpine linux doesn't create a mail spool for users by default
-# RUN sed --in-place -e '/CREATE_MAIL_SPOOL/ s/=yes/=no/' /etc/default/useradd
-
+RUN sed --in-place -e '/CREATE_MAIL_SPOOL/ s/=yes/=no/' /etc/default/useradd
 ARG devuser=developer
 ARG devuid=1000
 RUN grep -qs :${devuid}: /etc/group || \
-    addgroup -g $devuid $devuser
+    addgroup --gid $devuid $devuser
 RUN grep -qs ":${devuid}:[[:digit:]]+:" /etc/passwd || \
-    adduser -D -g "OAR Developer" -s /bin/bash \
-            -G $devuser -u $devuid $devuser
+    useradd -m --comment "OAR Developer" --shell /bin/bash \
+            --gid $devuid --uid $devuid $devuser
 
 RUN mkdir /home/$devuser/.m2
 
