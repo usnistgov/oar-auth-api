@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -348,7 +354,15 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	public MetadataGeneratorFilter metadataGeneratorFilter() throws ConfigurationException {
-		return new MetadataGeneratorFilter(metadataGenerator());
+            return new MetadataGeneratorFilter(metadataGenerator()) {
+                public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                    throws IOException, ServletException
+                {
+                    log.info("Engaging metadata generator filter");
+                    super.doFilter(request, response, chain);
+                    log.info("At end of filter chain: entity="+generator.getEntityId());
+                }
+            };
 	}
 
 	/**
