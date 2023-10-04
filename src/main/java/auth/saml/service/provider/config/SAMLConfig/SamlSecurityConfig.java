@@ -359,10 +359,10 @@ public class SamlSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	public MetadataGenerator metadataGenerator() throws ConfigurationException {
-		logger.info("Metadata generator : sets the entity id and base url to establish communication with ID server." +entityId );
-		MetadataGenerator metadataGenerator = new MetadataGenerator();
-		metadataGenerator.setEntityId(entityId);
-		metadataGenerator.setEntityBaseURL(entityBaseURL);
+		logger.info("Metadata generator : sets the entity id and base url to establish communication with ID server. "+entityId );
+		MetadataGenerator metadataGenerator = new MetadataGenerator(); 
+		metadataGenerator.setEntityId("gov:nist:oar:oardev");
+		metadataGenerator.setEntityBaseURL("https://oardev.nist.gov:8099/od/sso");
 		metadataGenerator.setExtendedMetadata(extendedMetadata());
 		metadataGenerator.setIncludeDiscoveryExtension(false);
 		metadataGenerator.setKeyManager(keyManager());
