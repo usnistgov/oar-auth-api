@@ -3,6 +3,9 @@ FROM maven:3.5-jdk-8-alpine
 RUN  apk update && apk upgrade && apk add netcat-openbsd zip git less \
                                           gnupg shadow python nss wget
 
+COPY cacerts/README.md cacerts/*.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
 # ENV GOSU_VERSION 1.10
 # RUN set -ex; arch=amd64; \
 #     wget -O /usr/local/bin/gosu \
