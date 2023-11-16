@@ -56,9 +56,13 @@ public class SamlWithRelayStateEntryPoint extends SAMLEntryPoint {
 				.getInboundMessageTransport();
 
 		String redirectURL = httpServletRequestAdapter.getParameterValue("redirectTo");
-
-
-		if (redirectURL != null && defaultRedirect.contains(redirectURL)) {
+        boolean allowed = false;
+		for (String urlString : defaultRedirectURLs) {
+			if (redirectURL.startsWith(urlString))
+				allowed = true; break;
+		}
+		
+		if (redirectURL != null && allowed) {
 			log.info("Redirect user to +" + redirectURL);		
 			ssoProfileOptions.setRelayState(redirectURL);
 		} else {

@@ -3,6 +3,8 @@ package auth.saml.service.provider.config.SAMLConfig;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,13 +44,25 @@ public class CustomCORSFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 
-		List<String> allowedOrigins = Arrays.asList(allowedURLs);
+                // List<String> allowedOrigins = Arrays.asList(allowedURLs);
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 
 		// Access-Control-Allow-Origin
 		String origin = request.getHeader("Origin");
-		response.setHeader("Access-Control-Allow-Origin", allowedOrigins.contains(origin) ? origin : "");
+                for(String appurl : allowedURLs) {
+                    try {
+                        URL url = new URL(appurl);
+                        url = new URL(url.getProtocol(), url.getHost(), url.getPort(), "");
+                        if (origin == null || origin.isEmpty())
+                            origin = url.toString();
+                        if (origin.startsWith(url.toString())) {
+                            response.setHeader("Access-Control-Allow-Origin", origin);
+                            break;
+                        }
+                    } catch (MalformedURLException ex) { }
+                }
+                
 		response.setHeader("Vary", "Origin");
 
 		// Access-Control-Max-Age

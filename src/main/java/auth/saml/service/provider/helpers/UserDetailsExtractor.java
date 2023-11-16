@@ -25,18 +25,19 @@ public class UserDetailsExtractor {
 	@Value("${saml.attribute.claim.userid}")
 	private String useridAttribute;
 	
-	@Value("${saml.attribute.claim.usergroup}")
-	private String usergroup;
-
-	@Value("${saml.attribute.claim.nistdivisionname}")
-	private String divisionname;
-
-	@Value("${saml.attribute.claim.nistdivisionnumber}")
-	private String divisionnumber;
-
-	@Value("${saml.attribute.claim.nistouname}")
-	private String ouname;
-
+//	@Value("${saml.attribute.claim.usergroup}")
+//	private String usergroup;
+//
+//	@Value("${saml.attribute.claim.nistdivisionname}")
+//	private String divisionname;
+//
+//	@Value("${saml.attribute.claim.nistdivisionnumber}")
+//	private String divisionnumber;
+//
+//	@Value("${saml.attribute.claim.nistouname}")
+//	private String ouname;
+	@Value("${saml.attribute.claim.nistouacr}")
+	private String ouacr;
 	/**
 	 * Return userId if authenticated user and in context else return empty string
 	 * if no user can be extracted.
@@ -53,11 +54,12 @@ public class UserDetailsExtractor {
 			String name = credential.getAttributeAsString(nameAttribute);
 			String email = credential.getAttributeAsString(emailAttribute);
 			String userid = credential.getAttributeAsString(useridAttribute);
-			String group = credential.getAttributeAsString(usergroup);
-			String division = credential.getAttributeAsString(divisionname);
-			String divnumber = credential.getAttributeAsString(divisionnumber);
-			String OU = credential.getAttributeAsString(ouname);
-			authUser = new AuthenticatedUserDetails(email, name, lastName, userid, group,division,divnumber,OU);
+//			String group = credential.getAttributeAsString(usergroup);
+//			String division = credential.getAttributeAsString(divisionname);
+//			String divnumber = credential.getAttributeAsString(divisionnumber);
+//			String OU = credential.getAttributeAsString(ouname);
+			String OUacrm = credential.getAttributeAsString(ouacr);
+			authUser = new AuthenticatedUserDetails(email, name, lastName, userid, OUacrm);
 
 		} catch (Exception exp) {
 			logger.error("No user is authenticated and return empty userid");

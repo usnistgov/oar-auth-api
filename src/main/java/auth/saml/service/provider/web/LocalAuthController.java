@@ -4,20 +4,16 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,6 +27,9 @@ import auth.saml.service.provider.exceptions.UnAuthorizedUserException;
 import auth.saml.service.provider.helpers.AuthenticatedUserDetails;
 import auth.saml.service.provider.service.JWTTokenGenerator;
 import auth.saml.service.provider.service.UserToken;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 
 
 
@@ -52,23 +51,40 @@ public class LocalAuthController {
 	@Autowired
 	JWTTokenGenerator jwt;
 
-	@RequestMapping(value = { "_perm/{ediid}" }, method = RequestMethod.GET, produces = "application/json")
-	public UserToken tokenLocal(Authentication authentication, @PathVariable @Valid String ediid)
-			throws UnAuthorizedUserException, UnAuthenticatedUserException, BadGetwayException, CustomException {
-		logger.info(
-				"This should be called only in local profile, while testing locally. It returns sample user values.");
-//		String name = authentication.getName();
-//		Object ob = authentication.getDetails();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null)
-			throw new UnAuthenticatedUserException("No user authenticated to complete this request.");
-		AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
-		return jwt.getLocalJWT(pauth, ediid);
-		// return jwt.getLocalJWT(new AuthenticatedUserDetails("TestGuest@test.com",
-		// "Guest", "User", "Guest"), ediid);
+	
+	/**
+	 * Get the JWT for the authorized user
+	 * 
+	 * @param authentication
+	 * @param ediid
+	 * @return JSON with userid and token
+	 * @throws UnAuthorizedUserException
+	 * @throws CustomException
+	 * @throws UnAuthenticatedUserException
+	 */
+	@RequestMapping(value = { "/_tokeninfo" }, method = RequestMethod.GET, produces = "application/json")
+	@Parameters ({
+	    @Parameter(name = "Authentication", description = "authentication object.")})
+	   	@Operation(summary = "Get the authorized token.", description = "Resource returns a JSON if Authorized user.")
+	public UserToken token( Authentication authentication )
+			throws UnAuthorizedUserException, CustomException, UnAuthenticatedUserException, BadGetwayException {
+
+		try {
+
+			if (authentication == null || authentication.getPrincipal().equals("anonymousUser"))
+				throw new UnAuthenticatedUserException(" User is not authenticated to access this resource.");
+			logger.info("Get the token for authenticated user.");
+			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
+			UserToken ustoken = jwt.getJWT(pauth);
+			System.out.print(ustoken);
+			return jwt.getJWT(pauth);
+		} catch (UnAuthenticatedUserException ex) {
+
+				throw ex;
+		}
 
 	}
-
+	
 	/**
 	 * Get Authenticated user information
 	 * 
@@ -78,17 +94,20 @@ public class LocalAuthController {
 	 */
 
 	@RequestMapping(value = { "/_logininfo" }, method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<AuthenticatedUserDetails> loginLocal(HttpServletResponse response, Authentication authentication) throws IOException {
+	public ResponseEntity<AuthenticatedUserDetails> loginLocal(HttpServletResponse response, Authentication authentication) throws UnAuthorizedUserException, CustomException, UnAuthenticatedUserException, BadGetwayException {
 		logger.info("Get the authenticated user info.");
-//		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
-			response.sendRedirect("/customization/saml/login");
-		} else {
+			//response.sendRedirect("/saml/login");
+			throw new UnAuthenticatedUserException("Unauthenticated User", "User is not authenticated or not logged in.");
+		}
+		try {
 			AuthenticatedUserDetails pauth = (AuthenticatedUserDetails) authentication.getPrincipal();
 			
 			return new ResponseEntity<>(pauth, HttpStatus.OK);
-		}
-		return null;
+		}catch (Exception ex) {
+
+			throw new CustomException("Error getting Authentication details.");
+	    }
 	}
 	/**
 	 * Exception handling if user is not authorized

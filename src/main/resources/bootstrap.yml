@@ -9,7 +9,8 @@ spring:
       uri: http://localhost:8084
       
 logging:
-  file: /var/log/saml.log
+  file:
+    path: /tmp/authapi
   exception-conversion-word: '%wEx'
   
 springdoc:
@@ -18,11 +19,12 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
 
-samlauth:
-  enabled: true
+#samlauth:
+#  enabled: true
   
 server:
   servlet:
     session:
       cookie:
         secure: true
+

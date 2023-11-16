@@ -21,15 +21,40 @@ public class UserToken implements Serializable {
 	 */
 	private static final long serialVersionUID = -3414986086109823716L;
 	private String token;
-	private AuthenticatedUserDetails userDetails;
 	private String errorMessage;
+	private AuthenticatedUserDetails userDetails;
 
-	public UserToken(AuthenticatedUserDetails userDetails, String token, String errorMessage) {
+	public UserToken( String token, AuthenticatedUserDetails userDetails) {
 		this.token = token;
 		this.userDetails = userDetails;
+	}
+	
+	public UserToken( String token, String errorMessage) {
+		this.token = token;
 		this.errorMessage = errorMessage;
 	}
+	
+	public UserToken( String token) {
+		this.token = token;
+		
+	}
 
+	/**
+	 * Get Authenticated User Deatils
+	 * @return
+	 */
+	public AuthenticatedUserDetails getUserDetails() {
+		return this.userDetails;
+	}
+	/**
+	 * Set Authenticated user details
+	 * @param userDetails
+	 */
+	public void setUserDetails(AuthenticatedUserDetails userDetails) {
+		this.userDetails = userDetails;
+	}
+	
+	
 	/**
 	 * get the JWT generated for authorized user
 	 * @return String
@@ -45,21 +70,7 @@ public class UserToken implements Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	/**
-	 * Get authenticated user details
-	 * @return
-	 */
-	public AuthenticatedUserDetails getUserDetails() {
-		return this.userDetails;
-	}
 
-	/**
-	 * Set authenticated user details
-	 * @param userDetails
-	 */
-	public void setUserDetails(AuthenticatedUserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
 	
 	/***
 	 * Set this error message if there is an error while token is generated 
